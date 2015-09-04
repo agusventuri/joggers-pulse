@@ -1,4 +1,4 @@
-# Joggers Pulse
+﻿# Joggers Pulse
 Esta es una aplicación para Android para gestionar los planes de entrenamiento de una persona y marcar el ritmo del ejercicio a traves de tonos.
 Fue programada usando distintas tecnologías:
 
@@ -7,3 +7,10 @@ Fue programada usando distintas tecnologías:
 * CSS
 * Javascript
 * Material Lite
+
+Tambien se utilizaron plugins de phonegap. Estos son:
+
+* Device
+* File
+* Media
+* Whitelist
