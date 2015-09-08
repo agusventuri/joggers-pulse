@@ -2,14 +2,27 @@
 @font-face {
     font-family: 'Material Icons';
     font-style: normal;
-    font-weight: 400;
-    src: url('../font/MaterialIcons-Regular.eot');
+    font-weight: 200;
+    src: url(../font/MaterialIcons-Regular.eot);
     src: local('Material Icons'),
     local('MaterialIcons-Regular'),
-    url('../font/MaterialIcons-Regular.woff2') format('woff2'),
-    url('../font/MaterialIcons-Regular.woff') format('woff'),
-    url('../font/MaterialIcons-Regular.ttf') format('truetype'),
-    url('../font/Material-Icons.woff2') format('woff2');
+    url(../font/MaterialIcons-Regular.woff2) format('woff2'),
+    url(../font/MaterialIcons-Regular.woff) format('woff'),
+    url(../font/MaterialIcons-Regular.ttf) format('truetype'),
+    url(../font/Material-Icons.woff2) format('woff2');
+}
+/*
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Roboto Thin'), local('Roboto-Thin'), url(../font/Roboto.zip) format('woff2');
+}*/
+@font-face{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 100;
+    src: local('Roboto Light'), local('Roboto-Light'), url(../font/Roboto-Thin.ttf) format('truetype');
 }
 .material-icons {
     font-family: 'Material Icons';
@@ -63,11 +76,27 @@
     width: 394px;
     height: 400px;
 }
+.demo-card-square-add.mdl-card{
+    width: 394px;
+    height: 100%;
+}
+.demo-card-square-run.mdl-card {
+    width: 320px;
+    height: 100%;
+}
 .demo-card-square > .mdl-card__title {
     color: #fff;
     background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
 }
 .demo-card-square-edit > .mdl-card__title{
+    color: #fff;
+    background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
+}
+.demo-card-square-add > .mdl-card__title{
+    color: #fff;
+    background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
+}
+.demo-card-square-run > .mdl-card__title{
     color: #fff;
     background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
 }
@@ -115,6 +144,37 @@
     margin: 0 3%;
     font-size: 16px;
 }
+.time input{
+    width: 50%;
+    margin-left: 3%;
+    text-align: center;
+}
+.test1{
+    width: 20%;
+    margin-left: 2%;
+}
+.display{
+    float: right;
+    display: block;
+    position: absolute;
+    margin: 9% 28.5% 0 28.5%;
+    font-size: 37px;
+    font-family: "Roboto" sans-serif;
+}
+.list{
+    width: 86%;
+    margin-left: 7%;
+}
+.progress{
+    font-family: "Roboto" sans-serif;
+    font-size: 20px;
+    margin-left: 12%;
+}
+.test{
+    font-size: 19px;
+    font-style: normal;
+}
+
 @media screen and (max-width: 450px){
     .cards{
         margin-top: 8%;
@@ -129,10 +189,16 @@
         width: 300px;
         height: 350px;
     }
+    .demo-card-square-run.mdl-card{
+        width: 272px;
+    }
     .cards.demo-card-square-edit.mdl-card{
         margin-top: 8%;
         margin-left: 10%;
         margin-bottom: 10%;
+    }
+    .demo-card-square-add.mdl-card{
+        width: 300px;
     }
     .edit{
         top:-56px;
@@ -144,14 +210,22 @@
     .select-type{
         width: 88px;
     }
+    .display{
+        margin-left: 16%;
+    }
+    .keyboard{
+        margin-left: 16%;
+    }
 }
 .boton{
     float: right;
 }
+.boton#save{
+    margin-top: 5%;
+}
 .botona{
     float: left;
 }
-/*BARRA DE PORCENTAGES*/
 .bar-general{
     width: 100%;
     height: 20px;
@@ -163,7 +237,7 @@
 }
 .bar-general p{
     text-align: center;
-    color: rgb(107, 107, 107);
+    color: #FCFEFE;
 }
 
 /*Boton Flotante*/
@@ -275,6 +349,6 @@ a.waves-effect .waves-ripple {
     z-index: -1;
 }
 
-#addEditCard{
+#addEditCard {
     display: none;
 }
