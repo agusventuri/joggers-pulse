@@ -61,19 +61,19 @@ function querySuccess(tx, results) {
     document.getElementById("cards").innerHTML =tblText;
 }
 
-/*function crear() {
-    var idExercise = 1;
-    var name = "A";
-    var description = "B";
-    var timeDefault = 60;
-    var percentages = ["50","50"];
-    var tipos = ["0","1"];
-
-    var tblText = "<div class='cards mdl-card mdl-shadow--2dp demo-card-square'><div class='mdl-card__title mdl-card--expand'><button id='edit"+idExercise+"' onclick=\"goEditPage('"+idExercise+"','"+ name +"','"+description+"','"+timeDefault+"','"+percentages+"','"+tipos+"');\" class='edit mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect'><i class='material-icons md-light'>edit</i></button><h2 class='mdl-card__title-text'>" + name + "</h2></div><div class='mdl-card__supporting-text'>" + description + " - " + timeDefault + " Minutos</div><div class='mdl-card__actions mdl-card--border'><button id='buttonEditRun"+ idExercise +"' class='botona mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>input</i></button><button id='buttonRun"+ idExercise +"' class='boton mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>directions_run</i></button></div></div>";
-
-
-    document.getElementById("cards").innerHTML =tblText;
-}*/
+//function crear() {
+//    var idExercise = 1;
+//    var name = "A";
+//    var description = "B";
+//    var timeDefault = 59;
+//    var percentages = ["0","25","50","25"];
+//    var tipos = ["7","0","1","0"];
+//
+//    var tblText = "<div class='cards mdl-card mdl-shadow--2dp demo-card-square'><div class='mdl-card__title mdl-card--expand'><button id='edit"+idExercise+"' onclick=\"goEditPage('"+idExercise+"','"+ name +"','"+description+"','"+timeDefault+"','"+percentages+"','"+tipos+"');\" class='edit mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect'><i class='material-icons md-light'>edit</i></button><h2 class='mdl-card__title-text'>" + name + "</h2></div><div class='mdl-card__supporting-text'>" + description + " - " + timeDefault + " Minutos</div><div class='mdl-card__actions mdl-card--border'><button id='buttonEditRun"+ idExercise +"' onclick=\"goRunPage('"+idExercise+"','"+ name +"','"+description+"','"+timeDefault+"','"+percentages+"','"+tipos+"', true);\" class='botona mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>input</i></button><button id='buttonRun"+ idExercise +"' onclick=\"goRunPage('"+idExercise+"','"+ name +"','"+description+"','"+timeDefault+"','"+percentages+"','"+tipos+"', false);\" class='boton mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>directions_run</i></button></div></div>";
+//
+//
+//    document.getElementById("cards").innerHTML =tblText;
+//}
 
 // Transaction error callback
 function errorCB(err) {
@@ -143,8 +143,6 @@ function goDelete() {
 
 //Show the edit page with the data from a card to edit
 function goEditPage(id,name,description,timeDefault,percentages,tipos) {
-    alert(percentages);
-    alert(tipos);
     nowEditingId=id;
     nowEditing = true;
     document.getElementById("addEditCard").style.display="block";
@@ -156,9 +154,99 @@ function goEditPage(id,name,description,timeDefault,percentages,tipos) {
     barPercentages = percentages.split(",");
     barTipos = tipos.split(",");
 
-    alert(barPercentages);
-    alert(barTipos);
     arrangePercentages();
+}
+
+//Show the run page
+function goRunPage(id,name,description,timeDefault,percentages,tipos,edit) {
+
+    // Sets the button differently according if the user is editing or not and arranges the data
+    if (edit) {
+        document.getElementById("runIcon").innerHTML = "expand_more";
+        document.getElementById("exerciseProgress").style.display = "none";
+        document.getElementById("runBtn").style.marginLeft = "-57%";
+        document.getElementById("runBtn").onclick = function(){
+            if (document.getElementById("runTimeSelector").value == "") {
+                alert("Debes ingresar un numero");
+            } else {
+                arrangeRunningData(document.getElementById("runTimeSelector").value,percentages,tipos);
+                document.getElementById("runtimeSelectorContainer").style.display = "none";
+                document.getElementById("exerciseProgress").style.display = "block";
+                document.getElementById("runBtn").style.marginLeft = null;
+                document.getElementById("runIcon").innerHTML = "play_arrow";
+
+                document.getElementById("runBtn").onclick = function() {run(name,description,document.getElementById("runTimeSelector").value,percentages,tipos);};
+            }
+        };
+    } else {
+        document.getElementById("runIcon").innerHTML = "pause";
+        document.getElementById("runtimeSelectorContainer").style.display = "none";
+        arrangeRunningData(timeDefault,percentages,tipos);
+    }
+
+    document.getElementById("cardsPage").style.display = "none";
+    document.getElementById("runCard").style.display = "block";
+}
+
+//Arranges the different data of a card
+function arrangeRunningData (timeDefault,percentages,tipos) {
+    tipos = tipos.split(",");
+    tipos.shift();
+    percentages = percentages.split(",");
+    percentages.shift();
+
+    var tiempos = percentages;
+    var sumOfTimes = 0;
+
+    var trs = "<table class='mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp'><tbody>";
+
+    // This for sentence parses the different percentage, times and everything else into legible data
+    for (var i = 0;i<tipos.length;i++){
+        // A partial time is calculated according to the percentages and the set time
+        tiempos[i] = Math.round(timeDefault/100*percentages[i]);
+        // The time is added to a var to check time integrity later
+        sumOfTimes = sumOfTimes + parseInt(tiempos[i]);
+
+        // In case that the sum of times doesn't match timeDefault, the last number is modified so it matches
+        if (i == tipos.length-1){
+            if (sumOfTimes > timeDefault) {
+                tiempos[i] -= 1;
+            } else if (sumOfTimes < timeDefault) {
+                tiempos[i] += 1;
+            }
+        }
+
+        // A switch that sets the type according to the number found in the array
+        switch(tipos[i]) {
+            case "0":
+                tipos[i]="Caminar";
+                break;
+            case "1":
+                tipos[i]="Marcha";
+                break;
+            case "2":
+                tipos[i]="Trote";
+                break;
+            case "3":
+                tipos[i]="3/4";
+                break;
+            case "4":
+                tipos[i]="Correr";
+                break;
+            default:
+                tipos[i]="Error";
+                break;
+        }
+
+        trs += "<tr><td><span class='mdl-badge'>"+tipos[i]+"</span></td><td><i class='material-icons'>trending_flat</i></td><td><span class='mdl-badge'>"+tiempos[i]+"min</span></td></tr>";
+    }
+
+    trs += "</tbody></table>";
+
+    var timeDisplay = timeDefault+"<i class='test'>m</i>00<i class='test'>s</i>";
+
+    document.getElementById("runTimeDisplay").innerHTML = timeDisplay;
+    document.getElementById("runTimetable").innerHTML = trs;
 }
 
 function goRun() {
@@ -172,14 +260,15 @@ function modSliderVal(id) {
 }
 
 //Prepares things to start the running function
-function run(tx,results) {
-    document.getElementById('qrpopup').style.display = 'none';
-    document.getElementById('runView').style.display = 'block';
+function run(name,description,timeDefault,percentagesUnparsed,tiposUnparsed) {
+    var time = timeDefault * 60;
+    var percentages = percentagesUnparsed.split(",");
+    percentages.shift();
+    var tipos = tiposUnparsed.split(",");
+    tipos.shift();
 
-    var name = results.rows.item(0).name;
-    var time = results.rows.item(0).timeDefault * 60;
-    var percentages = results.rows.item(0).percentages.split(",");
-    tipos = results.rows.item(0).tipos.split(",");
+    console.log(percentages);
+    console.log(tipos);
 
     times = percentages;
     for (var i=0;i<percentages.length;i++) {
@@ -190,7 +279,9 @@ function run(tx,results) {
         times [a] += times[a-1];
     }
 
-    document.getElementById('planName').innerHTML = name;
+    console.log(times);
+
+/*    document.getElementById('planName').innerHTML = name;
     document.getElementById('planTime').innerHTML = "Tiempo: " + time;
     document.getElementById('planPercentages').innerHTML = "Porcentajes: " + percentages;
     document.getElementById('planTipos').innerHTML = "Tipos: " + tipos;
@@ -198,7 +289,7 @@ function run(tx,results) {
     document.getElementById("tipo").innerHTML = "Tipo: " + tipos[timeLap];
 
     start = new Date();
-    chrono();
+    chrono();*/
 }
 
 //Chronometer that does stuff

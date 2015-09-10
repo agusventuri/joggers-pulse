@@ -46,6 +46,17 @@
         .card-edit{
             height: 1000px;
         }
+        .btn{
+            margin-top: 46%;
+            /*margin-left: -55%;*/
+            margin-bottom: 2%;
+        }
+        .load-excercise{
+
+        }
+        .load-excercise .mdl-progress{
+            width: 100%;
+        }
         @media screen and (max-width: 450px){
             .input-number{
                 width: 69px;
@@ -103,9 +114,11 @@
                 <p>Metronomo</p>
                 <p class="font-drawer">Volumen
                     <input class="mdl-slider mdl-js-slider" onchange="modSliderVal('metronomeVolume')"  id="metronomeVolumePoints" type="range" min="0" max="100"/>
+                    <label class="mdl-textfield__label" for="metronomeVolumePoints"></label>
                 </p>
                 <p class="font-drawer">Frecuencia
                     <input class="mdl-slider mdl-js-slider" onchange="modSliderVal('metronomeFrequency')"  id="metronomeFrequencyPoints" type="range" min="0" max="100"/>
+                    <label class="mdl-textfield__label" for="metronomeFrequencyPoints"></label>
                 </p>
 
             </div>
@@ -113,6 +126,7 @@
                 <p>Voces</p>
                 <p class="font-drawer">Volumen
                     <input class="mdl-slider mdl-js-slider" onchange="modSliderVal('voiceVolume')" id="voiceVolumePoints" type="range" min="0" max="100"/>
+                    <label class="mdl-textfield__label" for="voiceVolumePoints"></label>
                 </p>
             </div>
         </nav>
@@ -130,29 +144,29 @@
                 </a>
             </div>
 
+
         </div>
 
         <div class="page-content" id="addEditCard">
-
             <!-- ------------------------------------------------ADDEDIT CARD------------------------------------------------ -->
             <div class="cards mdl-card mdl-shadow--2dp demo-card-square-edit">
                 <div class="mdl-card__title mdl-card--expand">
                     <div class="title-edit test mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" type="text" id="addEditName" placeholder="Nombre del plan"/>
-                        <!--<label class="mdl-textfield__label" for="addEditName">Nombre del Plan</label>-->
+                        <label class="mdl-textfield__label" for="addEditName"></label>
                     </div>
                 </div>
                 <div class="mdl-card__supporting-text">
                     <div class="title-edit mdl-textfield mdl-js-textfield">
                         <textarea class="mdl-textfield__input" type="text" rows= "3" id="addEditDescription" placeholder="Descripcion del plan"></textarea>
-                        <!--<label class="mdl-textfield__label" for="addEditDescription">Definicion del plan</label>-->
+                        <label class="mdl-textfield__label" for="addEditDescription"></label>
                     </div>
                 </div>
                 <div class="mdl-card__actions mdl-card--border card-edit">
                     <div class="mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" min="0" max="600" type="number" pattern="-?[0-9]*(\.[0-9]+)?" id="addEditTimeDefault" placeholder="Minutos" />
-                        <!--<label class="mdl-textfield__label" for="addEditTimeDefault"></label>-->
-                        <span class="mdl-textfield__error">Ha ocurrido un error!</span>
+                        <label class="mdl-textfield__label" for="addEditTimeDefault"></label>
+                        <span class="mdl-textfield__error"></span>
                     </div>
                     <div class="">
                         <select class="select-type form-control" id="selectTipos">
@@ -164,7 +178,7 @@
                         </select>
                         <div class="mdl-textfield mdl-js-textfield input-number">
                             <input class="mdl-textfield__input" min="0" max="100" type="number" pattern="-?[0-9]*(\.[0-9]+)?" id="addEditPercentage" placeholder="%" />
-                            <!--<label class="mdl-textfield__label" for="addEditPercentage"></label>-->
+                            <label class="mdl-textfield__label" for="addEditPercentage"></label>
                             <span class="mdl-textfield__error" id="barPercentageError">Error</span>
                         </div>
                         <button onclick="addPercentage();" id="btnAgregar" class="btn-add mdl-button mdl-js-button mdl-button--primary mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
@@ -179,49 +193,40 @@
             </div>
 
         </div>
+
+        <div class="page-content" id="runCard">
+            <!-- ------------------------------------------------RUN CARD------------------------------------------------ -->
+            <div class="cards mdl-card mdl-shadow--2dp demo-card-square-run">
+
+                <div class="mdl-card__title mdl-card--expand">
+                    <label class="display" id="runTimeDisplay">00<i class="test">m</i>00<i class="test">s</i></label>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="runtimeSelectorContainer">
+                        <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"  id="runTimeSelector" />
+                        <label class="mdl-textfield__label" for="runTimeSelector">Minutos a correr...</label>
+                        <span class="mdl-textfield__error">Input is not a number!</span>
+                    </div>
+                    <button class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--fab mdl-button--mini-fab mdl-button--colored" id="runBtn">
+                        <i class="material-icons md-light" id="runIcon">expand_more</i>
+                    </button>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <div class="list" id="runTimetable"></div>
+                </div>
+                <div class="load-excercise mdl-card__actions mdl-card--border" id="exerciseProgress">
+                    <h5>Caminar</h5>
+                    <div id="p3" class="mdl-progress mdl-js-progress"></div>
+                    <script>
+                        document.querySelector('#p3').addEventListener('mdl-componentupgraded', function() {
+                            this.MaterialProgress.setProgress(33);
+                            this.MaterialProgress.setBuffer(87);
+                        });
+                    </script>
+                </div>
+
+            </div>
+            <!-- Your content goes here -->
+        </div>
     </main>
 </div>
 </body>
-
-<!--    <body>
-        <h1>Pulse</h1>
-        &lt;!&ndash;The hidden div tag for implementing the popup&ndash;&gt;
-        <div id="qrpopup">
-            <input type="text" id="editNameBox">
-            <input type="text" id="editTimeBox">
-            <input type="text" id="editPercentageBox">
-            <input type="text" id="editTipoBox">
-            <button onclick="goDelete()">Delete</button>
-            <button onclick="goEdit()">Edit</button>
-            <button onclick="goRun();">Run!</button>
-            <button onclick="document.getElementById('qrpopup').style.display='none';document.getElementById('main').style.display='block';">Discard</button>
-        </div>
-
-        <div id="main">
-            <h3>Ingresar los datos requeridos</h3>
-            <div>
-                <input type="text" placeholder="Name" id="txtName">
-                <input type="text" placeholder="Time" id="txtTime">
-                <input type="text" placeholder="Percentages" id="txtPercentage">
-                <input type="text" placeholder="Tipos" id="txtTipo">
-            </div>
-
-            <hr>
-
-            <div style="text-align: center">
-                <button onclick="goInsert()">Insert</button>
-                <button onclick="successCB()">Show All</button>
-            </div>
-
-        </div>
-
-        <div id="runView">
-            <h1 id="planName">Plan Name</h1>
-            <h3 id="planTime">Plan Time</h3>
-            <h3 id="planPercentages">Plan Percentages</h3>
-            <h3 id="planTipos">Plan Tipos</h3>
-            <h3 id="chronotime"></h3>
-            <h3 id="tipo">juejue</h3>
-        </div>
-    </body>-->
 </html>

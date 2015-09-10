@@ -86,19 +86,21 @@
 }
 .demo-card-square > .mdl-card__title {
     color: #fff;
-    background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
+    /*background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;*/
+    background: bottom right 15% no-repeat #46B6AC;
 }
 .demo-card-square-edit > .mdl-card__title{
     color: #fff;
-    background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
+    /*background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;*/
+    background: bottom right 15% no-repeat #46B6AC;
 }
 .demo-card-square-add > .mdl-card__title{
     color: #fff;
-    background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
+    background: bottom right 15% no-repeat #46B6AC;
 }
 .demo-card-square-run > .mdl-card__title{
     color: #fff;
-    background: url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
+    background: bottom right 15% no-repeat #46B6AC;
 }
 .edit{
     position: absolute;
@@ -350,5 +352,9 @@ a.waves-effect .waves-ripple {
 }
 
 #addEditCard {
+    display: none;
+}
+
+#runCard {
     display: none;
 }
