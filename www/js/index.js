@@ -3,6 +3,7 @@ var stop = 0;
 var times = 0;
 var tipos = 0;
 var secOld = -1;
+var pausar = false;
 var barPercentages = [100];
 var barTipos = [7];
 var nowEditingId = "0";
@@ -56,24 +57,10 @@ function querySuccess(tx, results) {
         var tipos = results.rows.item(i).tipos.toString();
         //var supporttingText = description + " - Duracion: " + timeDefault + "'";
 
-        tblText += "<div class='cards mdl-card mdl-shadow--2dp demo-card-square'><div class='mdl-card__title mdl-card--expand'><button id='edit"+idExercise+"' onclick=\"goEditPage('"+idExercise+"','"+ name +"','"+description+"','"+timeDefault+"','"+percentages+"','"+tipos+"');\" class='edit mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect'><i class='material-icons md-light'>edit</i></button><h2 class='mdl-card__title-text'>" + name + "</h2></div><div class='mdl-card__supporting-text'>" + description + " - " + timeDefault + " Minutos</div><div class='mdl-card__actions mdl-card--border'><button id='buttonEditRun"+ idExercise +"' class='botona mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>input</i></button><button id='buttonRun"+ idExercise +"' class='boton mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>directions_run</i></button></div></div>";
+        tblText += "<div class='cards mdl-card mdl-shadow--2dp demo-card-square'><div class='mdl-card__title mdl-card--expand'><button id='edit" + idExercise + "' onclick=\"goEditPage('" + idExercise + "','" + name + "','" + description + "','" + timeDefault + "','" + percentages + "','" + tipos + "');\" class='edit mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect'><i class='material-icons md-light'>edit</i></button><h2 class='mdl-card__title-text'>" + name + "</h2></div><div class='mdl-card__supporting-text'>" + description + " - " + timeDefault + " Minutos</div><div class='mdl-card__actions mdl-card--border'><button id='buttonEditRun" + idExercise + "' onclick=\"goRunPage('" + idExercise + "','" + name + "','" + description + "','" + timeDefault + "','" + percentages + "','" + tipos + "', true);\" class='botona mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>input</i></button><button id='buttonRun" + idExercise + "' onclick=\"goRunPage('" + idExercise + "','" + name + "','" + description + "','" + timeDefault + "','" + percentages + "','" + tipos + "', false);\" class='boton mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>directions_run</i></button></div></div>";
     }
     document.getElementById("cards").innerHTML =tblText;
 }
-
-//function crear() {
-//    var idExercise = 1;
-//    var name = "A";
-//    var description = "B";
-//    var timeDefault = 59;
-//    var percentages = ["0","25","50","25"];
-//    var tipos = ["7","0","1","0"];
-//
-//    var tblText = "<div class='cards mdl-card mdl-shadow--2dp demo-card-square'><div class='mdl-card__title mdl-card--expand'><button id='edit"+idExercise+"' onclick=\"goEditPage('"+idExercise+"','"+ name +"','"+description+"','"+timeDefault+"','"+percentages+"','"+tipos+"');\" class='edit mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect'><i class='material-icons md-light'>edit</i></button><h2 class='mdl-card__title-text'>" + name + "</h2></div><div class='mdl-card__supporting-text'>" + description + " - " + timeDefault + " Minutos</div><div class='mdl-card__actions mdl-card--border'><button id='buttonEditRun"+ idExercise +"' onclick=\"goRunPage('"+idExercise+"','"+ name +"','"+description+"','"+timeDefault+"','"+percentages+"','"+tipos+"', true);\" class='botona mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>input</i></button><button id='buttonRun"+ idExercise +"' onclick=\"goRunPage('"+idExercise+"','"+ name +"','"+description+"','"+timeDefault+"','"+percentages+"','"+tipos+"', false);\" class='boton mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>directions_run</i></button></div></div>";
-//
-//
-//    document.getElementById("cards").innerHTML =tblText;
-//}
 
 // Transaction error callback
 function errorCB(err) {
@@ -175,13 +162,14 @@ function goRunPage(id,name,description,timeDefault,percentages,tipos,edit) {
                 document.getElementById("runBtn").style.marginLeft = null;
                 document.getElementById("runIcon").innerHTML = "play_arrow";
 
-                document.getElementById("runBtn").onclick = function() {run(name,description,document.getElementById("runTimeSelector").value,percentages,tipos);};
+                document.getElementById("runBtn").onclick = function() {run(document.getElementById("runTimeSelector").value,percentages,tipos);};
             }
         };
     } else {
         document.getElementById("runIcon").innerHTML = "pause";
         document.getElementById("runtimeSelectorContainer").style.display = "none";
         arrangeRunningData(timeDefault,percentages,tipos);
+        run(timeDefault,percentages,tipos);
     }
 
     document.getElementById("cardsPage").style.display = "none";
@@ -243,9 +231,7 @@ function arrangeRunningData (timeDefault,percentages,tipos) {
 
     trs += "</tbody></table>";
 
-    var timeDisplay = timeDefault+"<i class='test'>m</i>00<i class='test'>s</i>";
-
-    document.getElementById("runTimeDisplay").innerHTML = timeDisplay;
+    document.getElementById("runTimeDisplay").innerHTML = timeDefault + "<i class='test'>m</i>00<i class='test'>s</i>";
     document.getElementById("runTimetable").innerHTML = trs;
 }
 
@@ -260,15 +246,12 @@ function modSliderVal(id) {
 }
 
 //Prepares things to start the running function
-function run(name,description,timeDefault,percentagesUnparsed,tiposUnparsed) {
+function run(timeDefault,percentagesUnparsed,tiposUnparsed) {
     var time = timeDefault * 60;
     var percentages = percentagesUnparsed.split(",");
     percentages.shift();
-    var tipos = tiposUnparsed.split(",");
+    tipos = tiposUnparsed.split(",");
     tipos.shift();
-
-    console.log(percentages);
-    console.log(tipos);
 
     times = percentages;
     for (var i=0;i<percentages.length;i++) {
@@ -279,23 +262,19 @@ function run(name,description,timeDefault,percentagesUnparsed,tiposUnparsed) {
         times [a] += times[a-1];
     }
 
-    console.log(times);
-
-/*    document.getElementById('planName').innerHTML = name;
-    document.getElementById('planTime').innerHTML = "Tiempo: " + time;
-    document.getElementById('planPercentages').innerHTML = "Porcentajes: " + percentages;
-    document.getElementById('planTipos').innerHTML = "Tipos: " + tipos;
-
-    document.getElementById("tipo").innerHTML = "Tipo: " + tipos[timeLap];
+    document.getElementById("runIcon").innerHTML = "pause";
+    document.getElementById("runBtn").onclick = function() {
+        pausar = true;
+    };
 
     start = new Date();
-    chrono();*/
+    chrono();
 }
 
 //Chronometer that does stuff
 function chrono() {
     stop = times[timeLap];
-    //SE LE AGREGO EL VAR PORQUE SEGUN EL IDE LO NECESITABA
+
     var end = new Date();
     var diff = end - start;
     var diff = new Date(diff);
@@ -319,23 +298,24 @@ function chrono() {
 
     if (sec == stop) {
         timeLap++;
-        document.getElementById("tipo").innerHTML = tipos[timeLap];
     }
 
     if (sec > secOld) {
         secOld++;
         if (secOld%2 == false){
-            playMP3();
+            console.log("Lala: " + secOld);
         }
     }
 
-    document.getElementById("chronotime").innerHTML = hr + ":" + min + ":" + sec + ":" + msec;
-    //SE LE AGREGO EL VAR PORQUE SEGUN EL IDE LO NECESITABA
+    document.getElementById("runTimeDisplay").innerHTML = min + "<i class='test'>m</i>" + sec + "<i class='test'>s";
+
     var timerID = setTimeout("chrono()", 0);
 
-    if (times.length == timeLap) {
-        document.getElementById("tipo").innerHTML = tipos[timeLap-1];
-        document.getElementById("chronotime").innerHTML = "0:00:00.000";
+    if (times.length == timeLap || pausar) {
+        document.getElementById("runIcon").innerHTML = "play_arrow";
+        document.getElementById("runCard").style.display = "none";
+        document.getElementById("cardsPage").style.display = "block";
+        document.getElementById("runTimeDisplay").innerHTML = "00<i class='test'>m</i>00<i class='test'>s";
         clearTimeout(timerID);
     }
 }
@@ -460,3 +440,16 @@ function deletePercentage(i) {
         arrangePercentages();
     }
 }
+
+
+// Function used to debug different parts of the app faster on the browser
+/*function crear() {
+ var idExercise = 1;
+ var name = "A";
+ var description = "B";
+ var timeDefault = 59;
+ var percentages = ["0","25","50","25"];
+ var tipos = ["7","0","1","0"];
+
+ document.getElementById("cards").innerHTML ="<div class='cards mdl-card mdl-shadow--2dp demo-card-square'><div class='mdl-card__title mdl-card--expand'><button id='edit" + idExercise + "' onclick=\"goEditPage('" + idExercise + "','" + name + "','" + description + "','" + timeDefault + "','" + percentages + "','" + tipos + "');\" class='edit mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect'><i class='material-icons md-light'>edit</i></button><h2 class='mdl-card__title-text'>" + name + "</h2></div><div class='mdl-card__supporting-text'>" + description + " - " + timeDefault + " Minutos</div><div class='mdl-card__actions mdl-card--border'><button id='buttonEditRun" + idExercise + "' onclick=\"goRunPage('" + idExercise + "','" + name + "','" + description + "','" + timeDefault + "','" + percentages + "','" + tipos + "', true);\" class='botona mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>input</i></button><button id='buttonRun" + idExercise + "' onclick=\"goRunPage('" + idExercise + "','" + name + "','" + description + "','" + timeDefault + "','" + percentages + "','" + tipos + "', false);\" class='boton mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect'><i class='material-icons md-lightº'>directions_run</i></button></div></div>";
+ }*/

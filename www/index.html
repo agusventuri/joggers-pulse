@@ -136,6 +136,7 @@
 
             <!-- --------------------------------------------------CARDS-------------------------------------------------- -->
             <div id="cards"></div>
+            <!-- Button used to execute a function used to debug different parts of the app faster on the browser-->
             <!--<button onclick="crear();">Crear</button>-->
             <!-- --------------------------------------------------ADD BTN-------------------------------------------------- -->
             <div class="fixed-action-btn" onclick="document.getElementById('cardsPage').style.display='none';document.getElementById('addEditCard').style.display='block';arrangePercentages(); document.getElementById('addEditSaveBtn').value='Guardar';" id="addBtn" style="bottom: 45px; right: 24px;">
@@ -214,11 +215,10 @@
                 </div>
                 <div class="load-excercise mdl-card__actions mdl-card--border" id="exerciseProgress">
                     <h5>Caminar</h5>
-                    <div id="p3" class="mdl-progress mdl-js-progress"></div>
+                    <div id="progressBar" class="mdl-progress mdl-js-progress"></div>
                     <script>
-                        document.querySelector('#p3').addEventListener('mdl-componentupgraded', function() {
+                        document.querySelector('#progressBar').addEventListener('mdl-componentupgraded', function() {
                             this.MaterialProgress.setProgress(33);
-                            this.MaterialProgress.setBuffer(87);
                         });
                     </script>
                 </div>
