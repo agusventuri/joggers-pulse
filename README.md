@@ -14,3 +14,8 @@ Tambien se utilizaron plugins de phonegap. Estos son:
 * File
 * Media
 * Whitelist
+
+Este proyecto es desarrollado por:
+
+* Juan Frattin: Diseñador
+* Agustin Venturi: Programador
